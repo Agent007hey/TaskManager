@@ -37,3 +37,11 @@ export const updateTask = async(taskId , userId , title , description , status)=
 
 
 }
+
+export const deleteTask = async(taskId , userId)=>{
+
+  const data = await Task.findOneAndDelete({_id:taskId , createdBy:userId} ); //always pass _id not id
+
+  return data;
+
+}
