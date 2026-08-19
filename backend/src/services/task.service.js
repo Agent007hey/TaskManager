@@ -28,3 +28,12 @@ export const getOneTask = async(userId, taskId)=>{
 
   return task;
 }
+
+export const updateTask = async(taskId , userId , title , description , status)=>{
+
+  const task = await Task.findOneAndUpdate({_id:taskId , createdBy:userId} , {title , description , status} , {returnDocument:'after'});
+
+  return task;
+
+
+}
