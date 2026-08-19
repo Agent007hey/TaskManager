@@ -100,23 +100,23 @@ try {
 }
 
 export const updateTaskController = async(req , res)=>{
-  const {id} = req.params;
-  if(!id) {
-    return res.status(400).json({
-      success:false,
-      message:"Invalid/Missing Input",
-    })
-  }
-  const {title , description ,  status} = req.body;
-  if(!title || !description || !status){
-    return res.status(400).json({
-      success:false,
-      message:"Invalid/Missing Inputs"
-    })
-  }
-  let taskId = id;
-
+  //shifted the logic in try block to catch the error in case of any error
   try {
+    const {id} = req.params;
+    if(!id) {
+      return res.status(400).json({
+        success:false,
+        message:"Invalid/Missing Input",
+      })
+    }
+    const {title , description ,  status} = req.body;
+    if(!title || !description || !status){
+      return res.status(400).json({
+        success:false,
+        message:"Invalid/Missing Inputs"
+      })
+    }
+    let taskId = id;
     
     const data = await updateTask(taskId , req.user.id , title , description , status); 
     if(!data){
