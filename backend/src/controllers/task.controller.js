@@ -1,4 +1,5 @@
-import { createTask , getAllTasks , getOneTask } from "../services/task.service.js";
+import { json } from "express";
+import { createTask , getAllTasks , getOneTask , updateTask } from "../services/task.service.js";
 
 export const createController = async (req, res) => {
   const { title, description, status, priority, dueDate } = req.body;
@@ -96,4 +97,48 @@ try {
   })
   
 }
+}
+
+export const updateTaskController = async(req , res)=>{
+  const {id} = req.params;
+  if(!id) {
+    return res.status(400).json({
+      success:false,
+      message:"Invalid/Missing Input",
+    })
+  }
+  const {title , description ,  status} = req.body;
+  if(!title || !description || !status){
+    return res.status(400).json({
+      success:false,
+      message:"Invalid/Missing Inputs"
+    })
+  }
+  let taskId = id;
+
+  try {
+    
+    const data = await updateTask(taskId , req.user.id , title , description , status); 
+    if(!data){
+      return res.status(400).json({
+        
+        success:false,
+        message:"Invalid Credentials",
+      })
+    }
+
+    return res.status(200).json({
+      success:true,
+      message:"Update the task successfully",
+      data:data,
+    })
+  } catch (error) {
+
+    return res.status(500).json({
+      success:false,
+      message:  `Error in updateTaskcontroller: ${error}`,
+    })
+    
+  }
+
 }
