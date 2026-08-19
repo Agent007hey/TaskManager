@@ -1,4 +1,4 @@
-import { createTask , getAllTasks } from "../services/task.service.js";
+import { createTask , getAllTasks , getOneTask } from "../services/task.service.js";
 
 export const createController = async (req, res) => {
   const { title, description, status, priority, dueDate } = req.body;
@@ -62,3 +62,38 @@ export const allTaskController = async(req , res)=>{
     message:`error in allTaskController: ${error}`,
   })
 }}
+
+export const getOneTaskController = async(req , res)=>{
+  const {id} = req.params;
+  let taskId = id;
+  if(!taskId){
+    return res.status(400).json({
+      success:false,
+      message:"Invalid/Missing Input",
+    })
+  }
+try {
+  
+  const data = await getOneTask(req.user.id , taskId);
+  if(!data){
+    return res.status(404).json({
+      success:false,
+      message:"No task found",
+
+    });
+    
+  }
+
+  return res.status(200).json({
+    success:true,
+    message:"Fetched the Task data successfully",
+    data:data,
+  })
+} catch (error) {
+  return res.status(500).json({
+    success:false,
+    message:`Error in getOneTaskController : ${error}`
+  })
+  
+}
+}
