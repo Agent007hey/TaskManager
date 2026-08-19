@@ -19,3 +19,12 @@ export const getAllTasks = async(userId)=>{
   const tasks  = await Task.find({createdBy:userId});
   return tasks;
 }
+
+export const getOneTask = async(userId, taskId)=>{
+  const task = await Task.findOne({
+    _id:taskId,
+    createdBy:userId,
+  });
+
+  return task;
+}
