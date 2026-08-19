@@ -1,4 +1,4 @@
-import { createTask } from "../services/task.service.js";
+import { createTask , getAllTasks } from "../services/task.service.js";
 
 export const createController = async (req, res) => {
   const { title, description, status, priority, dueDate } = req.body;
@@ -39,3 +39,26 @@ export const createController = async (req, res) => {
     });
   }
 };
+
+export const allTaskController = async(req , res)=>{
+  const userId = req.user.id;
+  try {
+    const data = await getAllTasks(userId);
+    if(!data){
+      return res.status(500).json({
+        success:false,
+        message:"Error in allTaskController",
+      })
+    }
+
+    return res.status(200).json({
+      success:true,
+      message:"All tasks fetched successfully",
+      data:data,
+    })
+}catch(error){
+  return res.status(500).json({
+    success:false,
+    message:`error in allTaskController: ${error}`,
+  })
+}}

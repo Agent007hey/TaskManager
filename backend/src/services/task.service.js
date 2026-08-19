@@ -14,3 +14,8 @@ export const createTask =async (title , description , status , priority , dueDat
   return task;
 
 }
+
+export const getAllTasks = async(userId)=>{
+  const tasks  = await Task.find({createdBy:userId});
+  return tasks;
+}
