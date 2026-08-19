@@ -1,5 +1,5 @@
 import { json } from "express";
-import { createTask , getAllTasks , getOneTask , updateTask } from "../services/task.service.js";
+import { createTask , getAllTasks , getOneTask , updateTask , deleteTask } from "../services/task.service.js";
 
 export const createController = async (req, res) => {
   const { title, description, status, priority, dueDate } = req.body;
@@ -141,4 +141,39 @@ export const updateTaskController = async(req , res)=>{
     
   }
 
+}
+
+export const deleteTaskController = async(req  , res)=>{
+  try {
+    
+    const {id} = req.params;
+    if(!id){
+      return res.status(400).json({
+        success:false,
+        message:"Missing/Invalid Task Id",
+      })
+    }
+
+    const data = await deleteTask(id , req.user.id);
+    if(!data){
+      return res.status(400).json({
+        success:false,
+        message:"Invalid Input"
+      })
+    }
+
+    return res.status(200).json({
+      success:true,
+      message:"Task deleted Successfully",
+      data:data
+    })
+  } catch (error) {
+    return res.status(500).json({
+      success:false,
+      message: `Something error occured: ${error}`
+    })
+    
+  }
+
+  
 }
